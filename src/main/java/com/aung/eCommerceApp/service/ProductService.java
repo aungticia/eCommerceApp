@@ -33,4 +33,13 @@ public class ProductService {
     public void deleteProduct(int prodId) {
         repo.deleteProduct(prodId);
     }
+
+    public double calculateTotalPrice() {
+        double total = 0;
+        List<ProdPost> products = repo.getAllProducts();
+        for (ProdPost product : products) {
+            total += product.getProdPrice();
+        }
+        return total;
+    }
 }

@@ -5,15 +5,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Repository
 public class ProductRepo {
 
-    List<ProdPost> products = new ArrayList<>();
+    private static final List<ProdPost> products = new ArrayList<>();
 
     public ProductRepo() {
-        // Initialize products here
+        // Initialize your products here
         products.add(new ProdPost(1, "Phone", "Apple iPhone 13 pro max", 999, 2));
         products.add(new ProdPost(2, "Computer", "Apple MacBook Pro", 1499, 3));
     }
@@ -27,31 +27,33 @@ public class ProductRepo {
     }
 
     public ProdPost getProduct(int prodId) {
-        for(ProdPost product : products) {
-            if(product.getProdId() == prodId) {
-                return product;
-            }
-        }
-        return null;
+        return products.stream()
+                .filter(product -> product.getProdId() == prodId)
+                .findFirst()
+                .orElse(null);
     }
 
     public void updateProduct(ProdPost prodPost) {
-        for (ProdPost prodPost1 : products) {
-            if (prodPost1.getProdId() == prodPost.getProdId()) {
-                prodPost1.setProdName(prodPost.getProdName());
-                prodPost1.setProdDesc(prodPost.getProdDesc());
-                prodPost1.setProdPrice(prodPost.getProdPrice());
-                prodPost1.setProdQuantity(prodPost.getProdQuantity());
-            }
-        }
+        products.stream()
+                .filter(p -> p.getProdId() == prodPost.getProdId())
+                .findFirst()
+                .ifPresent(p -> {
+                    p.setProdName(prodPost.getProdName());
+                    p.setProdDesc(prodPost.getProdDesc());
+                    p.setProdPrice(prodPost.getProdPrice());
+                    p.setProdQuantity(prodPost.getProdQuantity());
+                });
     }
 
     public void deleteProduct(int prodId) {
-        for(ProdPost prodPost : products) {
-            if(prodPost.getProdId() == prodId) {
-                products.remove(prodPost);
-            }
-        }
+        products.removeIf(prodPost -> prodPost.getProdId() == prodId);
     }
+
+    public double calculateTotalPrice() {
+        return products.stream()
+                .mapToDouble(prod -> prod.getProdPrice() * prod.getProdQuantity())
+                .sum();
+    }
+
 
 }

@@ -42,6 +42,11 @@ public class ProductController {
     public String deleteProduct(@PathVariable int prodId)
     {
         service.deleteProduct(prodId);
-        return "Deleted";
+        return "Deleted....";
+    }
+
+    @GetMapping("totalPrice")
+    public double getTotalPrice() {
+        return service.calculateTotalPrice();
     }
 }
