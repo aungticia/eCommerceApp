@@ -18,6 +18,7 @@ public class ProductController {
     @GetMapping("prodPosts")
     public List<ProdPost> getAllProducts() {
         return service.getAllProducts();
+
     }
 
     @GetMapping("/prodPost/{prodId}")
@@ -41,12 +42,6 @@ public class ProductController {
     public String deleteProduct(@PathVariable int prodId)
     {
         service.deleteProduct(prodId);
-        return "Deleted...";
-    }
-
-    @GetMapping("load")
-    public String loadData() {
-        service.load();
-        return "Success...";
+        return "Deleted";
     }
 }
